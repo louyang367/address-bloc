@@ -1,5 +1,4 @@
 const inquirer = require('inquirer');
-const ContactController = require("./ContactController");
 
 module.exports = class MenuController {
   constructor(){
@@ -10,11 +9,12 @@ module.exports = class MenuController {
         message: "Please choose from an option below: ",
         choices: [
           "Add new contact",
+          "Show current date and time",
           "Exit"
         ]
       }
     ];
-    this.book = new ContactController();
+    this.contacts = [];
   }
 
   main(){
@@ -26,6 +26,10 @@ module.exports = class MenuController {
           break;
         case "Exit":
           this.exit();
+        case "Show current date and time":
+          this.getDate();
+          this.main();
+          break;
         default:
           console.log("Invalid input");
           this.main();
@@ -42,15 +46,8 @@ module.exports = class MenuController {
 
   addContact(){
     this.clear();
-    inquirer.prompt(this.book.addContactQuestions).then((answers) => {
-      this.book.addContact(answers.name, answers.phone, answers.email).then((contact) => {
-        console.log("Contact added successfully!");
-        this.main();
-      }).catch((err) => {
-        console.log(err);
-        this.main();
-      });
-    });
+    console.log('addContact called');
+    this.main();
   }
 
   exit(){
@@ -58,7 +55,7 @@ module.exports = class MenuController {
     process.exit();
   }
 
-  getContactCount(){
-    return this.contacts.length;
+  getDate(){
+    console.log(new Date().toLocaleString());
   }
 }
